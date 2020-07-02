@@ -38,5 +38,9 @@ def yourpage():
     return render_template('addpost.html', champions=champions)
 
 
+@app.route('/gift')
+def gift():
+    return render_template(gift.html)
+
 if __name__ == '__main__':
     app.run(debug=True)
