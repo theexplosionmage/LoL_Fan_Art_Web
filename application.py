@@ -10,13 +10,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class Lolfanart(db.Model):
+class Ligu(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(100), nullable=False)
     champion = db.Column(db.String(50), nullable=False)
     image = db.Column(db.LargeBinary, nullable=False)
     like = db.Column(db.Integer, default=0)
 
+db.create_all()
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -24,18 +25,18 @@ def home():
         if request.form.get('IncLike','None') == 'None':
             search = str(request.form['search'])
             images = []
-            obj = db.session.query(Lolfanart).filter_by(nickname=search).order_by(desc(Lolfanart.id)).all()
+            obj = db.session.query(Ligu).filter_by(nickname=search).order_by(desc(Ligu.id)).all()
             print(obj)
             for i in obj:
                 image = b64encode(i.image).decode('utf-8')
                 images.append(image)
             return render_template('PersonsPage.html', search=search, images=images)
         else:
-            user = Lolfanart.query.filter_by(nickname=request.form["IncLike"]).first()
+            user = Ligu.query.filter_by(nickname=request.form["IncLike"]).first()
             user.like += 1
             db.session.commit()
     images = {}
-    obj = Lolfanart.query.all()
+    obj = Ligu.query.all()
     for i in obj:
         nicksnlikes = (i.nickname, i.like)
         image = b64encode(i.image).decode("utf-8")
@@ -55,7 +56,7 @@ def yourpage():
         champion = request.form['ChampionSelect']
         nickname = request.form['Name']
         image = request.files['Image'].read()
-        b1 = Lolfanart(nickname=nickname, champion=champions[int(champion)], image=image)
+        b1 = Ligu(nickname=nickname, champion=champions[int(champion)], image=image)
         db.session.add(b1)
         db.session.commit()
         return champions[int(champion)] + ' ' + nickname + 'updated'
