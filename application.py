@@ -31,7 +31,7 @@ def home():
                 images.append(image)
             return render_template('PersonsPage.html', search=search, images=images)
         else:
-            user = Lolfanart.query.filter_by(nickname=request.form["search"]).first()
+            user = Lolfanart.query.filter_by(nickname=request.form["IncLike"]).first()
             user.like += 1
             db.session.commit()
     images = {}
