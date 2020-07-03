@@ -4,13 +4,13 @@
 {% endblock %}
 {% block content %}
 <h1 style="text-align: center">All posts from you guys</h1>
-
+{% endblock %}
 
 {% for i in images %}
 <div class="container">
   <img src="data:;base64,{{ i[0] }}" >
   <form method="post">
-  <button class="btn" name="search" value="{{i[1][0]}}">Like</button>
+  <button class="btn" name="IncLike" value="{{i[1][0]}}">Like</button>
     </form>
     <h1>{{i[1][1]}}</h1>
 </div>
@@ -19,7 +19,7 @@
 
 {% block search %}
 <form class="form-inline my-2 my-lg-0" method="post">
-    <input name = "search" value="checker" class="form-control mr-sm-2" type="search" placeholder="Champion or nickname" aria-label="Search">
+    <input name = "search"  class="form-control mr-sm-2" type="search" placeholder="Champion or nickname" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
 {% endblock %}

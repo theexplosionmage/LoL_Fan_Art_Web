@@ -18,14 +18,13 @@ class Lolfanart(db.Model):
     like = db.Column(db.Integer, default=0)
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        if request.form["search"] == "checker":
+        if request.form.get('IncLike','None') == 'None':
             search = str(request.form['search'])
             images = []
-            obj = db.session.query(Lolfanart).filter_by(nickname=search).order_by(desc(Posts.id)).all()
+            obj = db.session.query(Lolfanart).filter_by(nickname=search).order_by(desc(Lolfanart.id)).all()
             print(obj)
             for i in obj:
                 image = b64encode(i.image).decode('utf-8')
