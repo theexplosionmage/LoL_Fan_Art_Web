@@ -20,19 +20,29 @@ b1 = Posts.query.all()
 print(b1[0].Nickname)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    images = []
-    obj = Posts.query.all()
-    for i in obj:
-        image = b64encode(i.image).decode("utf-8")
-        images.append(image)
-    return render_template('index.html', images=images)
+    if request.method == 'GET':
+        images = []
+        obj = Posts.query.all()
+        for i in obj:
+            image = b64encode(i.image).decode("utf-8")
+            images.append(image)
+        return render_template('index.html', images=images)
+    if request.method == 'POST':
+        search = str(request.form['search'])
+        images = []
+        obj = db.session.query(Posts).filter_by(Nickname=search).all()
+        print(obj)
+        for i in obj:
+            image = b64encode(i.image).decode('utf-8')
+            images.append(image)
+        return render_template('PersonsPage.html', search=search, images=images)
 
 
 @app.route('/addpage', methods=['GET', 'POST'])
 def yourpage():
-    champions = ['Aatrox', 'Annie', 'Ahri', 'Ashe', 'Braum']
+    champions = ['Aatrox', 'Annie', 'Ahri', 'Ashe', 'Braum', 'Poppy']
     if request.method == 'POST':
         champion = request.form['ChampionSelect']
         nickname = request.form['Name']

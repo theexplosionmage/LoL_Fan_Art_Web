@@ -4,6 +4,13 @@
 FanArts
 {% endblock %}
 
+{% block search %}
+<form class="form-inline my-2 my-lg-0" method="post">
+    <input name = "search" class="form-control mr-sm-2" type="search" placeholder="Champion or nickname" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+{% endblock %}
+
 {% block content %}
 <h1 style="text-align: center">All posts from you guys</h1>
 {% for i in images %}

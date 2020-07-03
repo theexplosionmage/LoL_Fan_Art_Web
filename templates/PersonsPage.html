@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Your page
+{{ search }}
 {% endblock %}
 
+{% block content %}
+{% for i in images %}
+<img style="width: 33% " src="data:;base64,{{ i }}"/>
+{% endfor %}
+{% endblock %}
