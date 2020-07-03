@@ -6,10 +6,13 @@ Add post
 
 {% block content %}
 <br>
-<form method="post" enctype="multipart/form-data">
-  <label style="width: 100%">
-    <input type="text" placeholder="Enter your nickname" name="Name">
-  </label>
+<form style="width: 80%; align-items: center" method="post" enctype="multipart/form-data">
+  <div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Nickname</span>
+  </div>
+  <input name="Name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+</div>
   <label style="width: 100%">
     <select class="form-control" name="ChampionSelect">
       {% for i in range(champions|length) %}

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from base64 import b64encode
+from sqlalchemy import desc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///champions.sqlite'
@@ -24,7 +25,7 @@ print(b1[0].Nickname)
 def home():
     if request.method == 'GET':
         images = []
-        obj = Posts.query.all()
+        obj = Posts.query.order_by(desc(Posts.id)).all()
         for i in obj:
             image = b64encode(i.image).decode("utf-8")
             images.append(image)
@@ -32,12 +33,17 @@ def home():
     if request.method == 'POST':
         search = str(request.form['search'])
         images = []
-        obj = db.session.query(Posts).filter_by(Nickname=search).all()
+        obj = db.session.query(Posts).filter_by(Nickname=search).order_by("id desc").all()
         print(obj)
         for i in obj:
             image = b64encode(i.image).decode('utf-8')
             images.append(image)
         return render_template('PersonsPage.html', search=search, images=images)
+
+
+@app.route('/aboutus')
+def about():
+    return render_template('aboutUs.html')
 
 
 @app.route('/addpage', methods=['GET', 'POST'])
