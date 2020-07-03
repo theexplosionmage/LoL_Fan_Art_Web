@@ -13,7 +13,7 @@ Add post
   <label style="width: 100%">
     <select class="form-control" name="ChampionSelect">
       {% for i in range(champions|length) %}
-    <option value="{{ i + 1 }}">{{ champions[i] }}</option>
+    <option value="{{ i }}">{{ champions[i] }}</option>
       {% endfor %}
   </select>
   </label>

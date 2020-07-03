@@ -6,4 +6,7 @@ FanArts
 
 {% block content %}
 <h1 style="text-align: center">All posts from you guys</h1>
+{% for i in images %}
+<img style="width: 33% " src="data:;base64,{{ i }}"/>
+{% endfor %}
 {% endblock%}

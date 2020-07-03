@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
+from base64 import b64encode
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///champions.sqlite'
@@ -21,7 +22,12 @@ print(b1[0].Nickname)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    images = []
+    obj = Posts.query.all()
+    for i in obj:
+        image = b64encode(i.image).decode("utf-8")
+        images.append(image)
+    return render_template('index.html', images=images)
 
 
 @app.route('/addpage', methods=['GET', 'POST'])
@@ -40,7 +46,7 @@ def yourpage():
 
 @app.route('/gift')
 def gift():
-    return render_template(gift.html)
+    return render_template('gift.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
