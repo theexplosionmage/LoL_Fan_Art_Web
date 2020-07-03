@@ -10,40 +10,43 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class Posts(db.Model):
+class Lolfanart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    Nickname = db.Column(db.String(100), nullable=False)
+    nickname = db.Column(db.String(100), nullable=False)
     champion = db.Column(db.String(50), nullable=False)
     image = db.Column(db.LargeBinary, nullable=False)
+    like = db.Column(db.Integer, default=0)
 
-
-b1 = Posts.query.all()
-print(b1[0].Nickname)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'GET':
-        images = []
-        obj = Posts.query.order_by(desc(Posts.id)).all()
-        for i in obj:
-            image = b64encode(i.image).decode("utf-8")
-            images.append(image)
-        return render_template('index.html', images=images)
     if request.method == 'POST':
-        search = str(request.form['search'])
-        images = []
-        obj = db.session.query(Posts).filter_by(Nickname=search).order_by("id desc").all()
-        print(obj)
-        for i in obj:
-            image = b64encode(i.image).decode('utf-8')
-            images.append(image)
-        return render_template('PersonsPage.html', search=search, images=images)
-
+        if request.form["search"] == "checker":
+            search = str(request.form['search'])
+            images = []
+            obj = db.session.query(Lolfanart).filter_by(nickname=search).order_by(desc(Posts.id)).all()
+            print(obj)
+            for i in obj:
+                image = b64encode(i.image).decode('utf-8')
+                images.append(image)
+            return render_template('PersonsPage.html', search=search, images=images)
+        else:
+            user = Lolfanart.query.filter_by(nickname=request.form["search"]).first()
+            user.like += 1
+            db.session.commit()
+    images = {}
+    obj = Lolfanart.query.all()
+    for i in obj:
+        nicksnlikes = (i.nickname, i.like)
+        image = b64encode(i.image).decode("utf-8")
+        images[image] = nicksnlikes
+    return render_template('index.html', images=images.items())
 
 @app.route('/aboutus')
 def about():
     return render_template('aboutUs.html')
+
 
 
 @app.route('/addpage', methods=['GET', 'POST'])
@@ -53,7 +56,7 @@ def yourpage():
         champion = request.form['ChampionSelect']
         nickname = request.form['Name']
         image = request.files['Image'].read()
-        b1 = Posts(Nickname=nickname, champion=champions[int(champion)], image=image)
+        b1 = Lolfanart(nickname=nickname, champion=champions[int(champion)], image=image)
         db.session.add(b1)
         db.session.commit()
         return champions[int(champion)] + ' ' + nickname + 'updated'
@@ -63,6 +66,8 @@ def yourpage():
 @app.route('/gift')
 def gift():
     return render_template('gift.html')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
